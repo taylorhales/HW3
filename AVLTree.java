@@ -1,6 +1,6 @@
 
 /*
- * *** YOUR NAME GOES HERE / YOUR SECTION NUMBER ***
+ * *** Taylor Hales COMP 400C-001 - Fall 2024 ***
  *
  * This java file is a Java object implementing simple AVL Tree.
  * You are to complete the deleteElement method.
@@ -358,10 +358,77 @@ class LUC_AVLTree {
          *      - RLRotation.
          *
          * To understand what each of these methods do, see the method prologues and
-         * code for each. You can also look at the method InsertElement, as it has do
+         * code for each. You can also look at the method InsertElement, as it has to
          * do many of the same things as this method.
          */
+        if (node == null) // check if node is null
+            return node; // if a value isn't found, return null
 
+        // check if the value being deleted is smaller than node's value, if yes it is in the left subtree
+        if (value < node.value)
+            node.leftChild = deleteElement(value, node.leftChild);
+
+        // check if the value being deleted is larger than node's value, if yes it is in the right subtree
+        else if (value > node.value)
+            node.rightChild = deleteElement(value, node.rightChild);
+
+        // check if the value is the same as the node, if yes the node needs to be deleted
+        else {
+            // node with one or no child
+            if ((node.leftChild == null) || (node.rightChild == null)){
+                Node temp = node.leftChild != null ? node.leftChild : node.rightChild;
+
+                // if there is no child
+                if (temp == null){
+                    temp = node;
+                    node = null;
+                } else // if there is one child
+                    node = temp; // copy the contents of the non-empty child
+            } else {
+                // if a node has two children, get the inorder successor aka smallest in the right subtree
+                Node temp = minValueNode(node.rightChild);
+
+                // copy over the inorder successor's data to the new node
+                node.value = temp.value;
+
+                // now delete the inorder successor
+                node.rightChild = deleteElement(temp.value, node.rightChild);
+            }
+        }
+
+        // if there is only one node in the tree
+        if (node == null)
+            return node;
+
+        // now the height of the current node has to be updated
+        node.height = getMaxHeight(getHeight(node.leftChild), getHeight(node.rightChild)) + 1;
+
+        // now check the balance factor of the node to see if it is unbalanced
+        int balance = getBalanceFactor(node);
+
+        // if the node is unbalanced, there are 4 cases
+
+        // left left
+        if (balance > 1 && getBalanceFactor(node.leftChild) >= 0)
+            return LLRotation(node);
+
+        // left right
+        if (balance > 1 && getBalanceFactor(node.leftChild) < 0){
+            node.leftChild = RRRotation(node.leftChild);
+            return LLRotation(node);
+        }
+
+        // right right
+        if (balance <- 1 && getBalanceFactor(node.rightChild) <= 0)
+            return RRRotation(node);
+
+        // right left
+        if (balance < -1 && getBalanceFactor(node.rightChild) > 0){
+            node.rightChild = LLRotation(node.rightChild);
+            return RRRotation(node);
+        }
+
+        // return the root node
         return node;
     }
 

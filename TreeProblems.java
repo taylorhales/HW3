@@ -1,5 +1,5 @@
 /*
- * *** YOUR NAME GOES HERE / YOUR SECTION NUMBER ***
+ * *** Taylor Hales COMP 400C-001 - Fall 2024 ***
  *
  * This java file contains several simple tree problems that need to be
  * codified. These routines  must use the TreeMap and TreeSet library
@@ -21,13 +21,27 @@ public class TreeProblems {
   
   public static Set<Integer> different(Set<Integer> setA, Set<Integer> setB) {
 
-    // INSERT CODE HERE - DO NOT FORGET TO PLACE YOUR NAME ABOVE
     //
     // This can be done numerous ways, but once such will only that
     // *several* lines of code. Hint: create two temporary TreeSets and utilize the
     // methods retainAll(), addAll(), and removeAll(). But in the end, get something to work.
 
-    return setA;
+    // make a copy of setA & setB
+    Set<Integer> inSetA = new TreeSet<>(setA);
+    Set<Integer> inSetB = new TreeSet<>(setB);
+    Set<Integer> commonElements = new TreeSet<>(setA);
+
+    // find the common elements
+    commonElements.retainAll(setB); // commonElements now holds the intersection of setA & setB
+
+    // remove common elements from each set
+    inSetA.removeAll(commonElements);
+    inSetB.removeAll(commonElements);
+
+    // combine the elements that are left
+    inSetA.addAll(inSetB);
+
+    return inSetA;
   }
 
 
@@ -40,9 +54,20 @@ public class TreeProblems {
 
   public static void removeEven(Map<Integer, String> treeMap) {
 
-    // INSERT CODE HERE.
+    // a set that will hold the even keys
+    Set<Integer> keysForRemoval = new HashSet<>();
 
-    return;
+    // iterate through keys & find the evens
+    for (Integer key : treeMap.keySet()){
+      if (key % 2 == 0){
+        keysForRemoval.add(key);
+      }
+    }
+
+    // remove even keys
+    for (Integer key : keysForRemoval){
+      treeMap.remove(key);
+    }
   }
 
 
@@ -55,10 +80,8 @@ public class TreeProblems {
 
   public boolean treesEqual(Map<Integer, String> tree1,Map<Integer, String> tree2 ) {
 
-    // INSERT CODE HERE
-
-    return false;
-
+    // you can compare both TreeMaps using the built-in equals() method
+    return tree1.equals(tree2);
   }
 
 } // end treeProblems class
